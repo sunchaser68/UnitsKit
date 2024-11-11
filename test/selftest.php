@@ -3,6 +3,17 @@
 require __DIR__ . '/../vendor/autoload.php';
 use deemru\UnitsKit;
 
+if( 0 )
+{
+    $uk = UnitsKit::TESTNET();
+    $uk->setPrivateKey( '0x33eb576d927573cff6ae50a9e09fc60b672a8dafdfbe3045c7f62955fc55ccb4' );
+    $tx = $uk->tx( $uk->getAddress(), $uk->hexValue( 1.1 ), $uk->getGasPrice(), $uk->getNonce() );
+    $tx = $uk->txEstimateGas( $tx );
+    $tx = $uk->txSign( $tx );
+    $tx = $uk->txBroadcast( $tx );
+    $tx = $uk->ensure( $tx );
+}
+
 function a2b( $a )
 {
     $b = '';
@@ -130,7 +141,7 @@ if( $privateKey !== false )
         $value = $uk->hexValue( 1.1 );
         for( $i = 0; $i < 8; ++$i ) // Known transaction? => increment `nonce`
         {
-            $tx = $uk->tx( $uk->getAddress(), $value, 0, $gasPrice, '', dechex( hexdec( $nonce ) + $i ) );
+            $tx = $uk->tx( $uk->getAddress(), $value, $gasPrice, dechex( hexdec( $nonce ) + $i ) );
             $tx = $uk->txEstimateGas( $tx );
             $tx = $uk->txSign( $tx );
             $tx = $uk->txBroadcast( $tx );

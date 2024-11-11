@@ -76,7 +76,7 @@ class UnitsKit
         return $this->wk->log( $level, $message );
     }
 
-    public function hexValue( $value, $decimals = 18 )
+    static public function hexValue( $value, $decimals = 18 )
     {
         $value = strval( $value );
         if( strpos( $value, '.' ) !== false )
@@ -95,9 +95,10 @@ class UnitsKit
         return '0x' . gmp_strval( $gmp, 16 );
     }
 
-    public function stringValue( $value, $decimals = 18 )
+    static public function stringValue( $value, $decimals = 18 )
     {
-        $value = gmp_init( $value, 16 );
+        if( is_string( $value ) )
+            $value = gmp_init( $value, 16 );
 
         $sign = '';
         if( gmp_sign( $value ) === -1 )
@@ -241,7 +242,7 @@ class UnitsKit
                 $q >>= 1;
                 if( $q === 0 )
                     break;
-                $p -= $q;
+                $p += $q;
             }
         }
 
@@ -249,7 +250,7 @@ class UnitsKit
         $p = 0;
         foreach( $path as $q => $lr )
         {
-            $proofs[] = $this->merkleBridgeHashAt( $tree, $p + $lr, $q );
+            $proofs[] = $this->merkleBridgeHashAt( $tree, $p + ( $lr ? 1 : 0 ), $q );
             if( $q !== 1 )
             {
                 $p += $lr ? 0 : 1;
@@ -583,14 +584,13 @@ class UnitsKit
         return chr( strlen( $binLen ) + $offset + 55 ) . $binLen;
     }
 
-    public function tx( $to, $value, $gas, $gasPrice, $input, $nonce )
+    public function tx( $to, $value, $gasPrice, $nonce, $input = '' )
     {
         return
         [
             'from' => $this->getAddress(),
             'nonce' => $nonce,
             'gasPrice' => $gasPrice,
-            'gas' => $gas,
             'to' => $to,
             'value' => $value,
             'input' => $input,
