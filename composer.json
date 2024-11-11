@@ -1,0 +1,28 @@
+{
+    "name": "deemru/unitskit",
+    "description": "Units.Network Development Kit",
+    "keywords": [ "wavesplatform" ],
+    "homepage": "http://github.com/deemru/UnitsKit",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dmitrii Pichulin",
+            "email": "deem@deem.ru"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "deemru\\": "src/"
+        }
+    },
+    "scripts": {
+        "test": [
+            "@php test/selftest.php"
+        ]
+    },
+    "require": {
+        "deemru/waveskit": "^1.0",
+        "simplito/elliptic-php": "^1.0"
+    }
+}
