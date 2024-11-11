@@ -29,6 +29,5 @@ jobs:
 
     - name: Composer test
       env:
-        WAVESKIT_SEED: ${{ secrets.WAVESKIT_SEED }}
-        WAVESKIT_NODES: ${{ secrets.WAVESKIT_NODES }}
+        UNITSKIT_PRIVATEKEY: ${{ secrets.UNITSKIT_PRIVATEKEY }}
       run: composer run-script test --timeout=3600
