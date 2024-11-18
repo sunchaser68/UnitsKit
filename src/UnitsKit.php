@@ -185,20 +185,22 @@ class UnitsKit
         ] ) );
     }
 
-    public function getBridgeTree( $blockHash )
+    public function getBridgeTree( $blockHash, $txhash )
     {
         $logs = $this->getBridgeLogs( $blockHash );
         if( $logs === false )
-            return false;
+            return [ false, false ];
 
         $tree = [];
-        foreach( $logs as $log )
+        $indexFound = false;
+        foreach( $logs as $index => $log )
         {
-            $index = hexdec( $log['logIndex'] );
             $tree[$index] = h2b( $log['data'] );
+            if( $log['transactionHash'] === $txhash )
+                $indexFound = $index;
         }
 
-        return $tree;
+        return [ $tree, $indexFound ];
     }
 
     private static $merkleBridgeDefault;
@@ -288,34 +290,33 @@ class UnitsKit
         if( !isset( $tx['receipt'] ) || !isset( $tx['succeed'] ) || !$tx['succeed'] )
         {
             $this->log( 'e', 'txBridgeProofs() not succeed tx' );
-            return false;
+            return [ false, false ];
         }
 
-        if( !isset( $tx['receipt']['logs'][0]['logIndex'] ) || !isset( $tx['receipt']['logs'][0]['data'] ) )
+        if( !isset( $tx['receipt']['logs'][0]['data'] ) )
         {
             $this->log( 'e', 'txBridgeProofs() not bridged tx' );
-            return false;
+            return [ false, false ];
         }
 
-        $tree = $this->getBridgeTree( $tx['receipt']['blockHash'] );
+        [ $tree, $index ] = $this->getBridgeTree( $tx['receipt']['blockHash'], $tx['hash'] );
         if( $tree === false )
-            return false;
+            return [ false, false ];
 
-        $logIndex = hexdec( $tx['receipt']['logs'][0]['logIndex'] );
-        if( !isset( $tree[$logIndex] ) )
+        if( $index === false )
         {
-            $this->log( 'e', 'txBridgeProofs() not found logIndex' );
-            return false;
+            $this->log( 'e', 'txBridgeProofs() not found txhash' );
+            return [ false, false ];
         }
 
         $logData = h2b( $tx['receipt']['logs'][0]['data'] );
-        if( $tree[$logIndex] !== $logData )
+        if( $tree[$index] !== $logData )
         {
             $this->log( 'e', 'txBridgeProofs() not found logData' );
-            return false;
+            return [ false, false ];
         }
 
-        return $this->merkleBridgeProofs( $tree, $logIndex, 1024 );
+        return [ $this->merkleBridgeProofs( $tree, $index, 1024 ), $index ];
     }
 
     public function txBroadcast( $tx, $verbose = true )
