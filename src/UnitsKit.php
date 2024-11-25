@@ -4,13 +4,13 @@ namespace deemru;
 
 use Elliptic\EC;
 
-function jd( string $data )
+function jd( $data )
 {
     $json = json_decode( $data, true, 512, JSON_BIGINT_AS_STRING );
     return $json === null ? false : $json;
 }
 
-function h2b( string $hex )
+function h2b( $hex )
 {
     if( substr( $hex, 0, 2 ) === '0x' )
         $hex = substr( $hex, 2 );
@@ -23,7 +23,7 @@ function h2b( string $hex )
     return hex2bin( $hex );
 }
 
-function b2h( string $bin )
+function b2h( $bin )
 {
     return '0x' . bin2hex( $bin );
 }
