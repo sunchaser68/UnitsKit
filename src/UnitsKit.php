@@ -4,13 +4,13 @@ namespace deemru;
 
 use Elliptic\EC;
 
-function jd( string $data )
+function jd( $data )
 {
     $json = json_decode( $data, true, 512, JSON_BIGINT_AS_STRING );
     return $json === null ? false : $json;
 }
 
-function h2b( string $hex )
+function h2b( $hex )
 {
     if( substr( $hex, 0, 2 ) === '0x' )
         $hex = substr( $hex, 2 );
@@ -23,7 +23,7 @@ function h2b( string $hex )
     return hex2bin( $hex );
 }
 
-function b2h( string $bin )
+function b2h( $bin )
 {
     return '0x' . bin2hex( $bin );
 }
@@ -48,7 +48,7 @@ class UnitsKit
                 'https://rpc.w8.io',
                 'https://rpc.unit0.dev',
             ],
-            88811,
+            88811
         );
     }
 
@@ -60,7 +60,7 @@ class UnitsKit
                 'https://rpc-testnet.w8.io',
                 'https://rpc-testnet.unit0.dev',
             ],
-            88817,
+            88817
         );
     }
 
@@ -81,7 +81,7 @@ class UnitsKit
         $value = strval( $value );
         if( strpos( $value, '.' ) !== false )
         {
-            [ $integer, $fractional ] = explode( '.', $value );
+            list( $integer, $fractional ) = explode( '.', $value );
             $fractional = substr( str_pad( $fractional, 18, '0' ), 0, 18 );
         }
         else
@@ -299,7 +299,7 @@ class UnitsKit
             return [ false, false ];
         }
 
-        [ $tree, $index ] = $this->getBridgeTree( $tx['receipt']['blockHash'], $tx['hash'] );
+        list( $tree, $index ) = $this->getBridgeTree( $tx['receipt']['blockHash'], $tx['hash'] );
         if( $tree === false )
             return [ false, false ];
 
