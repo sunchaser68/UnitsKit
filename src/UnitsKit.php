@@ -48,7 +48,7 @@ class UnitsKit
                 'https://rpc.w8.io',
                 'https://rpc.unit0.dev',
             ],
-            88811,
+            88811
         );
     }
 
@@ -60,7 +60,7 @@ class UnitsKit
                 'https://rpc-testnet.w8.io',
                 'https://rpc-testnet.unit0.dev',
             ],
-            88817,
+            88817
         );
     }
 
