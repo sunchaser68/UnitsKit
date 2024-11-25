@@ -81,7 +81,7 @@ class UnitsKit
         $value = strval( $value );
         if( strpos( $value, '.' ) !== false )
         {
-            [ $integer, $fractional ] = explode( '.', $value );
+            list( $integer, $fractional ) = explode( '.', $value );
             $fractional = substr( str_pad( $fractional, 18, '0' ), 0, 18 );
         }
         else
@@ -299,7 +299,7 @@ class UnitsKit
             return [ false, false ];
         }
 
-        [ $tree, $index ] = $this->getBridgeTree( $tx['receipt']['blockHash'], $tx['hash'] );
+        list( $tree, $index ) = $this->getBridgeTree( $tx['receipt']['blockHash'], $tx['hash'] );
         if( $tree === false )
             return [ false, false ];
 
