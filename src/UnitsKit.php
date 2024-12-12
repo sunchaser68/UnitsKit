@@ -128,8 +128,9 @@ class UnitsKit
 
     private function fetcher( $method, $params = '', $verbose = true )
     {
-        $json = $this->rpc->fetch( '/', true, '{"jsonrpc":"2.0","method":"' . $method . '","params":[' . $params . '],"id":1}' );
-        if( $json === false || false === ( $json = jd( $json ) ) || isset( $json['error'] ) )
+		$json = $this->rpc->fetch( '/', true, '{"jsonrpc":"2.0","method":"' . $method . '","params":[' . $params . '],"id":1}' );
+		
+		if( $json === false || false === ( $json = jd( $json ) ) || isset( $json['error'] ) )
         {
             $error = "fetcher() unknown error";
             if( isset( $json['error']['message'] ) )
@@ -147,6 +148,19 @@ class UnitsKit
     {
         return hexdec( $this->fetcher( 'eth_blockNumber' ) );
     }
+	
+	public function getBlockByNumber( $number, $fulltx = false )
+	{
+		$params = $number == 'latest' ? $number : $this->hexValue( $number );
+		$fulltx = $fulltx ? 'true' : 'false';
+		return $this->fetcher( 'eth_getBlockByNumber', '"' . $number . '","' . $fulltx . '"' );
+	}
+	
+	public function getBlockReceipts( $number )
+	{
+		$params = $number;
+		return $this->fetcher( 'eth_getBlockReceipts', '"' . $number . '"' );
+	}
 
     public function getTransactionReceipt( $hash )
     {

@@ -157,4 +157,14 @@ if( $privateKey !== false )
     }
 }
 
+$t->pretest( 'getBlockByNumber');
+{	
+    $t->test($uk->stringValue($uk->getBlockByNumber(489318)['number'],0) == '489318' );
+}
+
+$t->pretest( 'getBlockReceipts');
+{			
+    $t->test(count($uk->getBlockReceipts(489318)) >= 0 );
+}
+
 $t->finish();
