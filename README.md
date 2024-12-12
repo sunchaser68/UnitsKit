@@ -27,6 +27,6 @@ $tx = $uk->txBroadcast( $tx );
 $tx = $uk->ensure( $tx );
 ```
 
-## Documentaion
+## Documentation
 
 - Consider to learn self tests: [selftest.php](https://github.com/deemru/UnitsKit/blob/master/test/selftest.php)
